@@ -14,11 +14,17 @@ class JokeList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            jokes: []
+            jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]") 
         }
     }
 
-    async componentDidMount(){
+    componentDidMount(){
+        if(this.state.jokes.length === 0){
+            this.getJokes();
+        }
+    }
+
+    async getJokes(){
         let jokes = []
         while(jokes.length < this.props.numJokesToGet){
             let res = await axios.get("https://icanhazdadjoke.com/", {
@@ -30,10 +36,12 @@ class JokeList extends React.Component{
             votes: 0,
             id: uuid()
         });
+        window.localStorage.setItem("jokes", JSON.stringify(jokes))
         }
         this.setState({
             jokes
         })
+   
         console.log(this.state.jokes);
     }
 
