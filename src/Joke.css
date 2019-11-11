@@ -18,6 +18,7 @@
   .JokeText{
       width: 75%;
       font-size: 1.2rem;
+      margin-left: 20px;
   }
 
   .JokeVote{
