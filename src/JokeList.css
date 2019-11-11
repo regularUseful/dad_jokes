@@ -39,3 +39,28 @@
       width: 70%;
       box-shadow: 0 19px 38px rgba(0,0,0,.3), 0 15px 12px rgba(0,0,0,.1);
   }
+
+  .JokeList-getMore{
+      font-size: 1.5rem;
+      border-radius: 20px;
+      color: white;
+      font-weight: 700;
+      border: none;
+      padding: 1rem 2rem;
+      background: linear-gradient(
+        135deg,
+        rgba(179,229,252,1)0%,
+        rgba(179,229,252,1)50%,
+        rgba(240,98,146,1)50%,
+        rgba(240,98,146,1)100%
+      );
+      margin-top: 30px;
+      cursor: pointer;
+      box-shadow: 0 19px 38px rgba(0,0,0,.3), 0 15px 12px rgba(0,0,0,.1);
+      transition: all .2s;
+  }
+
+  .JokeList-getMore:hover{
+     transform: translateY(2px);
+     box-shadow: 0 7px 28px rgba(0,0,0,.3), 0 15px 12px rgba(0,0,0,.1);
+  }
