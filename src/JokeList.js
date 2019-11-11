@@ -17,6 +17,7 @@ class JokeList extends React.Component{
             loading: false,
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]") 
         }
+        this.seenJoke = new Set(this.state.jokes.map(i=>i.joke)) 
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -27,6 +28,7 @@ class JokeList extends React.Component{
     }
 
     async getJokes(){
+        try{
         console.log(this.state.loading)
         let jokes = []
         while(jokes.length < this.props.numJokesToGet){
@@ -34,18 +36,31 @@ class JokeList extends React.Component{
             headers: {accept: "application/json"}
         }
         );
-        jokes.push({
-            joke:res.data.joke,
-            votes: 0,
-            id: uuid()
-        });
+        let newJoke = res.data.joke;
+        if(!this.seenJoke.has(newJoke)){
+            jokes.push({
+                joke: newJoke,
+                votes: 0,
+                id: uuid()
+            });
+        }
+        else{
+            console.log("Found DUPE")
+        }
+       
         window.localStorage.setItem("jokes", JSON.stringify(jokes))
         }
         this.setState(st => ({
             loading: false,
             jokes: [...st.jokes, ...jokes]
-        }), ()=> window.localStorage.setItem( "jokes", JSON.stringify(this.state.jokes)))
-   
+        }), ()=> window.localStorage.setItem( "jokes", JSON.stringify(this.state.jokes)));
+    }
+    catch(e){
+        alert(e);
+        this.setState({
+            loading: false
+        })
+    }
         console.log(this.state.loading);
     }
 
@@ -53,7 +68,6 @@ class JokeList extends React.Component{
         this.setState({
             loading: true
         },  this.getJokes)
-       
     }
 
     handleVote(id, num){
