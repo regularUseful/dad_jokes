@@ -37,3 +37,9 @@
       margin: 10px;
       cursor: pointer;
   }
+
+  .spinner{
+      color: white;
+      text-align: center;
+      text-shadow: 0px 1px 70px #222;
+  }

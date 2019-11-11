@@ -14,6 +14,7 @@ class JokeList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            loading: false,
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]") 
         }
         this.handleClick = this.handleClick.bind(this);
@@ -21,11 +22,12 @@ class JokeList extends React.Component{
 
     componentDidMount(){
         if(this.state.jokes.length === 0){
-            this.getJokes();
+           this.getJokes()
         }
     }
 
     async getJokes(){
+        console.log(this.state.loading)
         let jokes = []
         while(jokes.length < this.props.numJokesToGet){
             let res = await axios.get("https://icanhazdadjoke.com/", {
@@ -40,14 +42,18 @@ class JokeList extends React.Component{
         window.localStorage.setItem("jokes", JSON.stringify(jokes))
         }
         this.setState(st => ({
+            loading: false,
             jokes: [...st.jokes, ...jokes]
         }), ()=> window.localStorage.setItem( "jokes", JSON.stringify(this.state.jokes)))
    
-        console.log(this.state.jokes);
+        console.log(this.state.loading);
     }
 
     handleClick(){
-        this.getJokes();
+        this.setState({
+            loading: true
+        },  this.getJokes)
+       
     }
 
     handleVote(id, num){
@@ -59,6 +65,14 @@ class JokeList extends React.Component{
     }
 
     render(){
+        if(this.state.loading){
+            return(
+                <div className = "spinner">
+                    <i className="fa-8x far fa-laugh fa-spin"></i>
+                    <h1 className="Jokelist-Title">Loading...</h1>
+                </div>
+            )
+        }
         return (
             <div className="JokeList">
                 <div className="JokeList-Sidebar">
