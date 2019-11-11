@@ -16,6 +16,7 @@ class JokeList extends React.Component{
         this.state = {
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]") 
         }
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount(){
@@ -38,11 +39,15 @@ class JokeList extends React.Component{
         });
         window.localStorage.setItem("jokes", JSON.stringify(jokes))
         }
-        this.setState({
-            jokes
-        })
+        this.setState(st => ({
+            jokes: [...st.jokes, ...jokes]
+        }), ()=> window.localStorage.setItem( "jokes", JSON.stringify(this.state.jokes)))
    
         console.log(this.state.jokes);
+    }
+
+    handleClick(){
+        this.getJokes();
     }
 
     handleVote(id, num){
@@ -50,7 +55,7 @@ class JokeList extends React.Component{
             jokes: st.jokes.map(i=>
                 i.id === id ? {...i, votes: i.votes + num} : i
                 )
-        }))
+        }),  ()=> window.localStorage.setItem( "jokes", JSON.stringify(this.state.jokes)))
     }
 
     render(){
@@ -59,7 +64,7 @@ class JokeList extends React.Component{
                 <div className="JokeList-Sidebar">
                     <h1 className="JokeList-Title"><span>Dad</span> Jokes</h1>
                     <img src="https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg" />
-                    <button className="JokeList-getMore">Jokes</button>
+                    <button onClick={this.handleClick} className="JokeList-getMore">Jokes</button>
                 </div>
                 <div className = "JokeList-jokes">
                     {this.state.jokes.map(i=>(
